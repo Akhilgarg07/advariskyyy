@@ -93,7 +93,7 @@ def generate_report_task(user_id, report_id, cache_client: RedisCache = get_cach
     cache_client.set_(f"{REDIS_KEY_PREFIX}{report_id}",
                       redis_value, expiration_time=60 * 60 * 24)
 
-    # TODO: Figure out how to expore container IP to the outside world
+    # TODO: Figure out how to expose container IP to the outside world
     # # Write report to CSV file
     # datetime_now = datetime.now()
     # filename = f"{datetime_now}_report.csv"
