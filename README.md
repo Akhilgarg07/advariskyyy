@@ -13,3 +13,10 @@ To get started with AdvaRisk, you'll need to install Docker and Docker Compose o
 `docker-compose up`
 
 This command will start the application and all its dependencies (PostgreSQL, Redis, RabbitMQ, and Celery). Once the application is running, you can access it at http://localhost:8000.
+
+# Important Read below:
+
+## There were few more things I could have done for this app but due to time constraints I was not able to, here are few
+
+1. For DB operations having a seperate crud.py file
+2. Generate a csv file for reports instead of json [:/](https://github.com/Akhilgarg07/advariskyyy/blob/277013a53c0ca26f6a2eaac5eaabff0f945fc18e/utils/tasks.py#L96)
