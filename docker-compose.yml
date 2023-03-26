@@ -1,0 +1,63 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    ports:
+      - '8000:8000'
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - SECRET_KEY=super-duper-duper-safe-key
+      - ALGORITHM=HS256
+      - SQLALCHEMY_DATABASE_URL=postgresql://postgres:postgres@postgres:5432/advarisk
+      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672/
+    depends_on:
+      - redis
+      - rabbitmq
+      - celery
+      - postgres
+
+  redis:
+    image: redis:6.2.6-alpine
+    ports:
+      - '6379:6379'
+
+  rabbitmq:
+    image: rabbitmq:3.9.5-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+
+  celery:
+    build: .
+    command: celery -A main.celery_app worker -l info -B -Q short_queue,long_queue
+    environment:
+      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672/
+      - CELERY_APP=main.celery_app
+      - SQLALCHEMY_DATABASE_URL=postgresql://postgres:postgres@postgres:5432/advarisk
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+    depends_on:
+      - rabbitmq
+      - redis
+      - postgres
+
+  postgres:
+    image: postgres:13.4-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=advarisk
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
