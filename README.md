@@ -1,3 +1,7 @@
+# How I pushed commit as [Linus Torvalds](https://en.wikipedia.org/wiki/Linus_Torvalds)
+
+`git -c user.name='Linus Torvalds' -c user.email='torvalds@linux-foundation.org' commit -m "docker moment 2"`
+
 # AdvaRisk - A Personal Finance Management Tool
 
 
